@@ -5,21 +5,21 @@ import 'package:learn/models/app_colors.dart';
 class ProductCard extends StatelessWidget {
   final String nameProduct;
   final String fileImage;
-  final String InfoProduct;
-  final String Price;
+  final String price;
+  final String description;
   const ProductCard(
       {Key? key,
       required this.nameProduct,
       required this.fileImage,
-      required this.InfoProduct,
-      required this.Price})
+      required this.description,
+      required this.price})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 500.0,
-      width: 300.0,
+      height: 550.0,
+      width: 250.0,
       child: Card(
         color: AppColors.backColor,
         child: Column(
@@ -30,32 +30,47 @@ class ProductCard extends StatelessWidget {
                 topLeft: Radius.circular(8.0),
                 topRight: Radius.circular(8.0),
               ),
-              child: Image.asset(
+              child: Image.network(
                 fileImage,
-                width: 300,
-                height: 300,
-                fit: BoxFit.fill,
+                width: 200,
+                // height: 300,
+                // fit: BoxFit.fill,
               ),
             ),
-            ListTile(
-              title: Text(
-                nameProduct,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textColor,
-                    fontSize: 25.0),
-              ),
-              subtitle: Text(
-                InfoProduct,
-                style: TextStyle(color: AppColors.textColor, fontSize: 20.0),
-              ),
+            Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 30.0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Text(
+                      nameProduct,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textColor,
+                          fontSize: 25.0),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 150.0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Text(
+                      description,
+                      style:
+                          TextStyle(color: AppColors.textColor, fontSize: 20.0),
+                    ),
+                  ),
+                ),
+              ],
             ),
             Container(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left: 12.0, top: 12.0),
                 child: Text(
-                  Price,
+                  price,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: AppColors.textColor,
@@ -63,27 +78,25 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.only(bottom: 10.0),
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  height: 50.0,
-                  width: 290.0,
-                  child: TextButton(
-                    onPressed: () {
-                      print("ok");
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll<Color>(
-                            AppColors.mainBlueColor)),
-                    child: Text(
-                      'Comprar',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.whiteColor,
-                          fontSize: 25.0),
-                    ),
+            Container(
+              padding: EdgeInsets.only(bottom: 10.0),
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: 50.0,
+                width: 290.0,
+                child: TextButton(
+                  onPressed: () {
+                    print("ok");
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll<Color>(
+                          AppColors.mainBlueColor)),
+                  child: Text(
+                    'Comprar',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25.0),
                   ),
                 ),
               ),

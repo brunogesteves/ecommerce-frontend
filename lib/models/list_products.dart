@@ -1,43 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-Future<Album> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-class Album {
-  final int userId;
-  final int id;
-  final String title;
-
-  const Album({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-    );
-  }
-}
+import 'package:learn/models/Product_Model.dart';
+import 'package:learn/models/product_card.dart';
+import 'package:dio/dio.dart';
 
 void main() => runApp(const ListProducts());
 
@@ -49,35 +17,39 @@ class ListProducts extends StatefulWidget {
 }
 
 class _ListProductsState extends State<ListProducts> {
-  late Future<Album> futureAlbum;
-
+  List<dynamic> frontProducts = [];
   @override
   void initState() {
+    getListProducts(); //fetching data
     super.initState();
-    futureAlbum = fetchAlbum();
+  }
+
+  void getListProducts() async {
+    try {
+      Response response =
+          await Dio().get("http://127.0.0.1:3000/frontproducts");
+      setState(() {
+        frontProducts = response.data;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Album>(
-      future: futureAlbum,
-      builder: (context, data) {
-        if (data.hasData) {
-          return Card(
-            key: ValueKey(data.data!.id),
-            margin: const EdgeInsets.all(10),
-            color: Colors.amber.shade100,
-            child: ListTile(
-              leading: Text(data.data!.title),
-              title: Text(data.data!.title),
-              subtitle: Text(data.data!.title),
-            ),
-          );
-        }
-
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
+    return Container(
+      alignment: Alignment.topCenter,
+      padding: EdgeInsets.all(20),
+      child: Wrap(
+          children: frontProducts
+              .map((prod) => ProductCard(
+                  nameProduct: prod["nome"],
+                  fileImage:
+                      "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
+                  description: prod["descricao"],
+                  price: prod["preco"]))
+              .toList()),
     );
   }
 }

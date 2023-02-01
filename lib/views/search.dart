@@ -3,9 +3,9 @@ import 'package:learn/models/header/header.dart';
 import 'package:learn/models/carousel.dart';
 import 'package:learn/models/list_products.dart';
 
-void main() => runApp(Home());
+void main() => runApp(Search());
 
-class Home extends StatelessWidget {
+class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +16,6 @@ class Home extends StatelessWidget {
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Header(),
-            Carousel(),
-            // ListProducts(),
           ]),
     )));
   }
