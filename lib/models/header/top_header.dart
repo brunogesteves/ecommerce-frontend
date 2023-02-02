@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_styles.dart';
+import 'package:learn/controller/controllers.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(TopHeader());
 
@@ -11,14 +12,21 @@ class TopHeader extends StatefulWidget {
 }
 
 class _TopHeaderState extends State<TopHeader> {
-  int count = 0;
+  String searchTerm = "Computers";
 
   @override
   Widget build(BuildContext context) {
-    print("sim: $count");
-    setState(() {
-      count = Universe.test();
-    });
+    void getResults(searchTerm) {
+      print(searchTerm);
+      Navigator.pushNamed(
+        context,
+        '/search',
+        arguments: <String, String>{
+          'searchChoosed': searchTerm,
+        },
+      );
+    }
+
     return Container(
         color: Color.fromARGB(255, 250, 212, 0),
         width: MediaQuery.of(context).size.width,
@@ -27,9 +35,17 @@ class _TopHeaderState extends State<TopHeader> {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(left: 50.0, right: 100.0),
-              child: Image(
-                image: AssetImage("assets/images/logotype.png"),
-                width: 50.0,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/',
+                  );
+                },
+                child: Image(
+                  image: AssetImage("assets/images/logotype.png"),
+                  width: 50.0,
+                ),
               ),
             ),
             SizedBox(
@@ -37,18 +53,23 @@ class _TopHeaderState extends State<TopHeader> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    onChanged: (String value) async {
+                      setState(() {
+                        searchTerm = value;
+                      });
+                    },
                     decoration: InputDecoration(
-                      labelText: "Procurar",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
                           borderSide: BorderSide.none),
                       filled: true, //<-- SEE HERE
                       fillColor: Colors.white,
-
                       hintText: "Procurar",
                       suffixIcon: IconButton(
                         icon: Icon(Icons.search),
-                        onPressed: () {},
+                        onPressed: () {
+                          getResults(searchTerm);
+                        },
                       ),
                     ),
                   ),
@@ -60,7 +81,11 @@ class _TopHeaderState extends State<TopHeader> {
                 width: 30.0,
               ),
             ),
-            Text(count.toString())
+            Consumer<IncController>(
+              builder: (BuildContext context, IncController value, child) {
+                return Text(value.number.toString());
+              },
+            )
           ],
         ));
   }

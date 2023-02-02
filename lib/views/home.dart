@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:learn/models/header/header.dart';
-import 'package:learn/models/carousel.dart';
-import 'package:learn/models/list_products.dart';
 
 void main() => runApp(Home());
 
@@ -16,7 +14,7 @@ class Home extends StatelessWidget {
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Header(),
-            Carousel(),
+            // Carousel(),
             // ListProducts(),
           ]),
     )));

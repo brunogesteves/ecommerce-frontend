@@ -1,9 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:learn/models/Product_Model.dart';
 import 'package:learn/models/product_card.dart';
 import 'package:dio/dio.dart';
 

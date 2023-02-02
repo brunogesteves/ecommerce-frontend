@@ -3,18 +3,18 @@ import 'package:learn/models/header/header.dart';
 import 'package:dio/dio.dart';
 import 'package:learn/models/product_card.dart';
 
-void main() => runApp(SearchPage());
+void main() => runApp(Department());
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class Department extends StatefulWidget {
+  const Department({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<Department> createState() => _DepartmentState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _DepartmentState extends State<Department> {
   List<dynamic> productsFromUniqueDepartment = [];
-  String searchTerm = "Computers";
+  String queryDepartment = "Computers";
   @override
   void initState() {
     super.initState();
@@ -22,8 +22,9 @@ class _SearchPageState extends State<SearchPage> {
 
   void getListProducts() async {
     try {
-      Response response = await Dio().get("http://127.0.0.1:3000/search",
-          queryParameters: {"searchTerm": searchTerm});
+      Response response = await Dio().get(
+          "http://127.0.0.1:3000/fromuniquedepartment",
+          queryParameters: {"queryDepartment": queryDepartment});
       setState(() {
         productsFromUniqueDepartment = response.data;
       });
@@ -34,11 +35,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    var searchChoosed = (ModalRoute.of(context)?.settings.arguments ??
+    final departmentChoosed = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     setState(() {
-      searchTerm = searchChoosed['searchChoosed'] ?? "";
-      getListProducts();
+      queryDepartment = departmentChoosed['departmentChoosed'];
+
+      getListProducts(); //fetching data
     });
     return Scaffold(
         body: SafeArea(
@@ -46,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Column(
         children: <Widget>[
           Header(),
-          Text(searchChoosed['searchChoosed'] ?? ""),
+          Text(departmentChoosed['departmentChoosed'] ?? ""),
           Wrap(
               children: productsFromUniqueDepartment
                   .map((prod) => ProductCard(

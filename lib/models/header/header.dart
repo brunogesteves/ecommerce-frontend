@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/header/bottomHeader.dart';
-import 'package:learn/models/header/topHeader.dart';
+import 'package:learn/models/header/bottom_header.dart';
+import 'package:learn/models/header/top_header.dart';
 
 void main() => runApp(Header());
 

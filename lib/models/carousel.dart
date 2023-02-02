@@ -1,7 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:learn/models/app_styles.dart';
+import 'package:learn/controller/controllers.dart';
+import 'package:provider/provider.dart';
 
 // final List<String> slidesList = [
 //   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -56,7 +57,8 @@ class _CarouselWithIndicatorState extends State<Carousel> {
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;
-                  Universe.changeInteger(index);
+                  Provider.of<IncController>(context, listen: false)
+                      .incNumber(index);
                 });
               },
               enlargeCenterPage: true,

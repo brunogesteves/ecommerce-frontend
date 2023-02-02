@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_colors.dart';
-import 'package:learn/models/app_styles.dart';
 import 'package:dio/dio.dart';
-
-import '../../views/eletronics.dart';
-import '../../views/furniture.dart';
 
 void main() => runApp(BottomHeader());
 
@@ -16,18 +11,18 @@ class BottomHeader extends StatefulWidget {
 }
 
 class _BottomHeaderState extends State<BottomHeader> {
-  List<dynamic> categoriesList = [];
+  List<dynamic> departamentList = [];
   @override
   void initState() {
-    getHttp(); //fetching data
+    getdepartaments(); //fetching data
     super.initState();
   }
 
-  void getHttp() async {
+  void getdepartaments() async {
     try {
-      Response response = await Dio().get("http://127.0.0.1:3000/categories");
+      Response response = await Dio().get("http://127.0.0.1:3000/departaments");
       setState(() {
-        categoriesList = response.data;
+        departamentList = response.data;
       });
     } catch (e) {
       print(e);
@@ -36,21 +31,28 @@ class _BottomHeaderState extends State<BottomHeader> {
 
   @override
   Widget build(BuildContext context) {
+    void changeScreen(depart) {
+      Navigator.pushNamed(
+        context,
+        '/department',
+        arguments: <String, String>{
+          'departmentChoosed': depart,
+        },
+      );
+    }
+
     return Container(
       color: Color.fromARGB(255, 250, 212, 0),
       width: MediaQuery.of(context).size.width,
       child: Wrap(
-          children: categoriesList
+          children: departamentList
               .map(
-                (cat) => TextButton(
+                (depart) => TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cat()),
-                      );
+                      changeScreen(depart);
                     },
                     child: Text(
-                      cat,
+                      depart,
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     )),
               )

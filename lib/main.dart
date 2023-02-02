@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learn/views/eletronics.dart';
-import 'package:learn/views/furniture.dart';
+import 'package:learn/controller/controllers.dart';
+import 'package:learn/views/department.dart';
 import 'package:learn/views/home.dart';
-import 'package:learn/views/search.dart';
+import 'package:learn/views/search_page.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,10 +14,18 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
       routes: {
-        '/search': (ctx) => Search(),
-        '/': (ctx) => Home(),
-        '/moveis': (ctx) => Furniture(),
-        '/eletronicos': (ctx) => Eletronics(),
+        '/': (ctx) => ChangeNotifierProvider(
+              child: Home(),
+              create: (_) => IncController(),
+            ),
+        '/department': (ctx) => ChangeNotifierProvider(
+              child: Department(),
+              create: (_) => IncController(),
+            ),
+        '/search': (ctx) => ChangeNotifierProvider(
+              child: SearchPage(),
+              create: (_) => IncController(),
+            ),
       },
     );
   }
