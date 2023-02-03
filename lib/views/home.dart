@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn/models/header/footer.dart';
 import 'package:learn/models/header/header.dart';
 
 void main() => runApp(Home());
@@ -16,6 +17,7 @@ class Home extends StatelessWidget {
             Header(),
             // Carousel(),
             // ListProducts(),
+            Footer()
           ]),
     )));
   }

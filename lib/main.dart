@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:learn/controller/controllers.dart';
+import 'package:learn/providers/shopping_cart.dart';
 import 'package:learn/views/department.dart';
 import 'package:learn/views/home.dart';
+import 'package:learn/views/payment.dart';
 import 'package:learn/views/search_page.dart';
+import 'package:learn/views/product_page.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => ShoppingCart())],
+    child: MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
@@ -14,18 +18,11 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (ctx) => ChangeNotifierProvider(
-              child: Home(),
-              create: (_) => IncController(),
-            ),
-        '/department': (ctx) => ChangeNotifierProvider(
-              child: Department(),
-              create: (_) => IncController(),
-            ),
-        '/search': (ctx) => ChangeNotifierProvider(
-              child: SearchPage(),
-              create: (_) => IncController(),
-            ),
+        '/': (ctx) => Home(),
+        '/department': (ctx) => Department(),
+        '/search': (ctx) => SearchPage(),
+        '/product': (ctx) => ProductPage(),
+        '/payment': (ctx) => PaymentPage(),
       },
     );
   }

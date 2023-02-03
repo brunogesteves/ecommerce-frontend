@@ -38,7 +38,7 @@ class _DepartmentState extends State<Department> {
     final departmentChoosed = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     setState(() {
-      queryDepartment = departmentChoosed['departmentChoosed'];
+      queryDepartment = departmentChoosed['departmentChoosed'] ?? "";
 
       getListProducts(); //fetching data
     });
@@ -48,7 +48,8 @@ class _DepartmentState extends State<Department> {
       child: Column(
         children: <Widget>[
           Header(),
-          Text(departmentChoosed['departmentChoosed'] ?? ""),
+          Text(departmentChoosed['departmentChoosed'] ??
+              "Escolha um departamento"),
           Wrap(
               children: productsFromUniqueDepartment
                   .map((prod) => ProductCard(
@@ -56,6 +57,7 @@ class _DepartmentState extends State<Department> {
                       fileImage:
                           "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
                       description: prod["descricao"],
+                      id: prod["id"],
                       price: prod["preco"]))
                   .toList()),
         ],

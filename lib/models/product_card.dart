@@ -7,16 +7,28 @@ class ProductCard extends StatelessWidget {
   final String fileImage;
   final String price;
   final String description;
+  final String id;
   const ProductCard(
       {Key? key,
       required this.nameProduct,
       required this.fileImage,
       required this.description,
+      required this.id,
       required this.price})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    void changeScreen(id) {
+      Navigator.pushNamed(
+        context,
+        '/product',
+        arguments: <String, String>{
+          'productId': id,
+        },
+      );
+    }
+
     return SizedBox(
       height: 550.0,
       width: 250.0,
@@ -86,13 +98,13 @@ class ProductCard extends StatelessWidget {
                 width: 290.0,
                 child: TextButton(
                   onPressed: () {
-                    print("ok");
+                    changeScreen(id);
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll<Color>(
                           AppColors.mainBlueColor)),
                   child: Text(
-                    'Comprar',
+                    'Ver detalhes',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

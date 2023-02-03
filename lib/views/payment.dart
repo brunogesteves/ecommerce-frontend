@@ -2,18 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:learn/models/header/footer.dart';
 import 'package:learn/models/header/header.dart';
 import 'package:dio/dio.dart';
-import 'package:learn/models/product_card.dart';
+import 'package:learn/providers/shopping_cart.dart';
+// import 'package:learn/models/app_colors.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(SearchPage());
+void main() => runApp(PaymentPage());
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+class PaymentPage extends StatefulWidget {
+  const PaymentPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _PaymentPageState extends State<PaymentPage> {
   List<dynamic> productsFromUniqueDepartment = [];
   String searchTerm = "Computers";
   @override
@@ -47,20 +49,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Column(
         children: <Widget>[
           Header(),
-          Text(searchChoosed['searchChoosed'] ?? ""),
-          productsFromUniqueDepartment.isEmpty
-              ? Text("faça uma busca")
-              : Wrap(
-                  children: productsFromUniqueDepartment
-                      .map((prod) => ProductCard(
-                          nameProduct: prod["nome"],
-                          fileImage:
-                              "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
-                          description: prod["descricao"],
-                          id: prod["id"],
-                          price: prod["preco"]))
-                      .toList()),
-          Footer()
+          // Footer()
         ],
       ),
     )));

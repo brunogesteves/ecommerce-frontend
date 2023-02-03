@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn/controller/controllers.dart';
+import 'package:learn/providers/shopping_cart.dart';
+import 'package:learn/models/app_colors.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(TopHeader());
@@ -28,7 +29,7 @@ class _TopHeaderState extends State<TopHeader> {
     }
 
     return Container(
-        color: Color.fromARGB(255, 250, 212, 0),
+        color: AppColors.headerBackGround,
         width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -75,16 +76,36 @@ class _TopHeaderState extends State<TopHeader> {
                   ),
                 )),
             Padding(
-              padding: EdgeInsets.only(left: 70),
-              child: Image.asset(
-                "../assets/images/car_market.png",
-                width: 30.0,
-              ),
+              padding: EdgeInsets.only(left: 30),
+              child: SizedBox(
+                  width: 70,
+                  height: 40,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset("../assets/images/car_market.png",
+                          width: 10.0, color: Colors.black),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Container(
+                          // width: 300.0,
+                          padding: EdgeInsets.only(left: 30.0),
+                          child: Text(
+                            context.watch<ShoppingCart>().number.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
             ),
-            Consumer<IncController>(
-              builder: (BuildContext context, IncController value, child) {
-                return Text(value.number.toString());
-              },
+            Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Text("Nome do usuario"),
             )
           ],
         ));
