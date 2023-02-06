@@ -43,7 +43,7 @@ class _ListProductsState extends State<ListProducts> {
                   fileImage:
                       "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
                   description: prod["descricao"],
-                  id: prod["id"],
+                  id: prod["id"].toString(),
                   price: prod["preco"]))
               .toList()),
     );

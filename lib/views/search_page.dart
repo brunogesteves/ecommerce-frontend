@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/header/footer.dart';
+import 'package:learn/models/footer.dart';
 import 'package:learn/models/header/header.dart';
 import 'package:dio/dio.dart';
 import 'package:learn/models/product_card.dart';
@@ -44,24 +44,26 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
         body: SafeArea(
             child: SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Header(),
-          Text(searchChoosed['searchChoosed'] ?? ""),
-          productsFromUniqueDepartment.isEmpty
-              ? Text("faça uma busca")
-              : Wrap(
-                  children: productsFromUniqueDepartment
-                      .map((prod) => ProductCard(
-                          nameProduct: prod["nome"],
-                          fileImage:
-                              "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
-                          description: prod["descricao"],
-                          id: prod["id"],
-                          price: prod["preco"]))
-                      .toList()),
-          Footer()
-        ],
+      child: Scrollbar(
+        child: Column(
+          children: <Widget>[
+            Header(),
+            Text(searchChoosed['searchChoosed'] ?? ""),
+            productsFromUniqueDepartment.isEmpty
+                ? Text("faça uma busca")
+                : Wrap(
+                    children: productsFromUniqueDepartment
+                        .map((prod) => ProductCard(
+                            nameProduct: prod["nome"],
+                            fileImage:
+                                "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
+                            description: prod["descricao"],
+                            id: prod["id"],
+                            price: prod["preco"]))
+                        .toList()),
+            Footer()
+          ],
+        ),
       ),
     )));
   }

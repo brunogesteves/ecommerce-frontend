@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/providers/shopping_cart.dart';
 import 'package:learn/models/app_colors.dart';
-import 'package:provider/provider.dart';
 
 void main() => runApp(Footer());
 

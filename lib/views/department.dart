@@ -45,22 +45,24 @@ class _DepartmentState extends State<Department> {
     return Scaffold(
         body: SafeArea(
             child: SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Header(),
-          Text(departmentChoosed['departmentChoosed'] ??
-              "Escolha um departamento"),
-          Wrap(
-              children: productsFromUniqueDepartment
-                  .map((prod) => ProductCard(
-                      nameProduct: prod["nome"],
-                      fileImage:
-                          "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
-                      description: prod["descricao"],
-                      id: prod["id"],
-                      price: prod["preco"]))
-                  .toList()),
-        ],
+      child: Scrollbar(
+        child: Column(
+          children: <Widget>[
+            Header(),
+            Text(departmentChoosed['departmentChoosed'] ??
+                "Escolha um departamento"),
+            Wrap(
+                children: productsFromUniqueDepartment
+                    .map((prod) => ProductCard(
+                        nameProduct: prod["nome"],
+                        fileImage:
+                            "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
+                        description: prod["descricao"],
+                        id: prod["id"],
+                        price: prod["preco"]))
+                    .toList()),
+          ],
+        ),
       ),
     )));
   }
