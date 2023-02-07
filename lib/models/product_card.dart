@@ -102,7 +102,7 @@ class ProductCard extends StatelessWidget {
                   },
                   style: ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll<Color>(
-                          AppColors.mainBlueColor)),
+                          AppColors.whiteColor)),
                   child: Text(
                     'Ver detalhes',
                     style: TextStyle(

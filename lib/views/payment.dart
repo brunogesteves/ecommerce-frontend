@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn/models/app_colors.dart';
 import 'package:learn/models/footer.dart';
 import 'package:learn/models/header/header.dart';
 import 'package:dio/dio.dart';
@@ -28,7 +29,6 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void getListProducts() async {
     idItems = context.read<ShoppingCart>().shoppingCart;
-    // print(idItems);
     print(idItems.length);
 
     try {
@@ -37,6 +37,7 @@ class _PaymentPageState extends State<PaymentPage> {
           queryParameters: {"idItems": idItems});
       setState(() {
         cartProducts = response.data;
+        // cartProducts2 = response.data;
       });
       while (i < cartProducts.length - 1) {
         finalPrice += double.parse(cartProducts[i]["preco"]);
@@ -45,6 +46,18 @@ class _PaymentPageState extends State<PaymentPage> {
           break;
         }
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void sendListProducts() async {
+    try {
+      print(cartProducts[0]);
+      Response response = await Dio().post(
+          "http://127.0.0.1:3000/user/sendproducts",
+          queryParameters: {"values": cartProducts});
+      print(response);
     } catch (e) {
       print(e);
     }
@@ -65,62 +78,100 @@ class _PaymentPageState extends State<PaymentPage> {
             Text(context.watch<ShoppingCart>().shoppingCart.toString()),
             cartProducts.isEmpty
                 ? Text("Carregando")
-                : ListView(
-                    shrinkWrap: true,
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Column(
-                          children: cartProducts
-                              .map((prod) => Center(
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 50, left: 60.0),
-                                        child: Row(
-                                          children: [
-                                            Image(
-                                              image: AssetImage(
-                                                  "assets/images/logotype.png"),
-                                              width: 50.0,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 50.0),
-                                              child: SizedBox(
-                                                  width: 300.0,
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Column(
+                                // mainAxisAlignment: MainAxisAlignment.center,
+                                children: cartProducts
+                                    .map(
+                                      (prod) => Container(
+                                        color: Colors.white,
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 50,
+                                                left: 60.0,
+                                                bottom: 50.0),
+                                            child: Row(
+                                              children: [
+                                                Image(
+                                                  image: AssetImage(
+                                                      "assets/images/logotype.png"),
+                                                  width: 50.0,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 50.0),
+                                                  child: SizedBox(
+                                                      width: 300.0,
+                                                      child: Text(
+                                                        prod["nome"].toString(),
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.amber),
+                                                      )),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 50.0),
                                                   child: Text(
-                                                    prod["nome"].toString(),
-                                                    style: TextStyle(
-                                                        color: Colors.amber),
-                                                  )),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 50.0),
-                                              child: Text(
-                                                  prod["preco"].toString()),
-                                            ),
-                                            Icon(Icons.delete)
-                                          ],
-                                        )),
-                                  ))
-                              .toList())
+                                                      prod["preco"].toString()),
+                                                ),
+                                                Icon(Icons.delete)
+                                              ],
+                                            )),
+                                      ),
+                                    )
+                                    .toList())
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Preco : ${finalPrice.toString()}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textColor,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
+                            SizedBox(
+                              height: 50.0,
+                              width: 200.0,
+                              child: TextButton(
+                                onPressed: () {
+                                  sendListProducts();
+                                },
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStatePropertyAll<Color>(
+                                            AppColors.buttonColor)),
+                                child: Text(
+                                  'Fazer Pagamento',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-            Text("Preco : ${finalPrice.toString()}"),
-            TextButton(
-              onPressed: () {
-                getListProducts();
-              },
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll<Color>(
-                      Color.fromARGB(255, 0, 250, 8))),
-              child: Text(
-                'Fazer Pagamento',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 12.0),
-              ),
-            ),
             Footer()
           ],
         ),
