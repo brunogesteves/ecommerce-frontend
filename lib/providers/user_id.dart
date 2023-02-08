@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 
 class UserProfile extends ChangeNotifier {
-  int _userId = 1;
+  Map<String, dynamic> _userInfo = {};
+  bool _isUserConnected = false;
+  List<dynamic> _userProducts = [];
 
-  int get userId => _userId;
-  // List<String> get shoppingCart => _shoppingCart;
+  Map<String, dynamic> get userInfo => _userInfo;
+  List<dynamic> get userProducts => _userProducts;
+  bool get isUserConnected => _isUserConnected;
 
-  // void addItem(id) {
-  //   _shoppingCart.add(id);
-  //   notifyListeners();
-  // }
+  void changeUserData(data) {
+    _isUserConnected = data["status"];
+    _userInfo.addAll(data["content"]);
+    notifyListeners();
+  }
+
+  void closeSession(status) {
+    _isUserConnected = false;
+    notifyListeners();
+  }
 }

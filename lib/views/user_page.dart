@@ -14,26 +14,59 @@ class User extends StatefulWidget {
 }
 
 class _UserState extends State<User> {
-  int userIdNumber = 1;
   Map<String, dynamic> userInformation = {};
   List<dynamic> userProducts = [];
+  String name = "";
+  String email = "";
+  String cpf = "";
+  int id = 1;
 
   @override
   void initState() {
     super.initState();
-    getInformation();
   }
 
-  void getInformation() async {
-    int idNumber = context.read<UserProfile>().userId;
+  void getShopping() async {
+    setState(() {
+      userInformation = context.read<UserProfile>().userInfo;
+      //  = userInformation["shopping"];
+      name = userInformation["name"];
+      email = userInformation["email"];
+      cpf = userInformation["cpf"];
+      id = userInformation["id"];
+    });
+
     try {
-      Response response = await Dio().get(
-        "http://127.0.0.1:3000/user/getUserInformation",
-        queryParameters: {"idNumber": idNumber},
-      );
+      Response response = await Dio()
+          .get("http://127.0.0.1:3000/user/getshopping", queryParameters: {
+        "id": id,
+      });
       setState(() {
-        userInformation = response.data;
-        userProducts.add(response.data["shopping"]);
+        userProducts = response.data;
+      });
+      dispose();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void backpage() {
+    if (context.read<UserProfile>().isUserConnected) {
+      Navigator.pushNamed(
+        context,
+        '/',
+      );
+    }
+  }
+
+  void updateInformation() async {
+    try {
+      Response response = await Dio()
+          .post("http://127.0.0.1:3000/user/updateuser", queryParameters: {
+        "name": name,
+        "email": email,
+        "cpf": cpf,
+        "id": id
       });
     } catch (e) {
       print(e);
@@ -41,9 +74,7 @@ class _UserState extends State<User> {
   }
 
   Widget build(BuildContext context) {
-    // List<String> fields = ["Nome", "Senha", "Email"];
-    userIdNumber = context.read<UserProfile>().userId;
-
+    getShopping();
     return SingleChildScrollView(
       child: Column(children: [
         Container(
@@ -52,9 +83,19 @@ class _UserState extends State<User> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Image(
-                image: AssetImage("assets/images/logotype.png"),
-                width: 50.0,
+              Material(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/',
+                    );
+                  },
+                  child: Image(
+                    image: AssetImage("assets/images/logotype.png"),
+                    width: 50.0,
+                  ),
+                ),
               ),
               Text(
                 "Área do Usúario",
@@ -63,182 +104,184 @@ class _UserState extends State<User> {
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                     decoration: TextDecoration.none),
-              )
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.read<UserProfile>().closeSession(false);
+                },
+                child: Text(
+                  "Sair",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
         Container(
-            child: userInformation.isEmpty
-                ? Text("Carregando",
-                    style: TextStyle(
-                        color: AppColors.textColor,
-                        fontSize: 30.0,
-                        decoration: TextDecoration.none))
-                : Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          child: TextField(
-                            onChanged: (String value) async {},
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xffF02E65)),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 66, 125, 145)),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: userInformation["name"],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          child: TextField(
-                            onChanged: (String value) async {},
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xffF02E65)),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 66, 125, 145)),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: userInformation["email"],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Material(
-                          child: TextField(
-                            obscureText: true,
-                            onChanged: (String value) async {},
-                            decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xffF02E65)),
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Color.fromARGB(255, 66, 125, 145)),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              hintText: userInformation["cpf"],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => item.card()),
-                          // );
-                        },
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll<Color>(
-                                AppColors.buttonColor)),
-                        child: Text(
-                          "Atualizar",
-                          style: TextStyle(
-                              color: AppColors.whiteColor,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.none),
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      Text(
-                        "Compras já realizadas",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none),
-                      ),
-                      ListView(
-                        shrinkWrap: true,
-                        children: [
-                          Column(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              children: userProducts
-                                  .map(
-                                    (prod) => Container(
-                                      color: Colors.white,
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 50,
-                                              left: 60.0,
-                                              bottom: 50.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Image(
-                                                image: AssetImage(
-                                                    "assets/images/logotype.png"),
-                                                width: 50.0,
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 50.0),
-                                                child: SizedBox(
-                                                    width: 300.0,
-                                                    child: Text(
-                                                      prod["nome"].toString(),
-                                                      style: TextStyle(
-                                                          color: AppColors
-                                                              .textColor,
-                                                          fontSize: 20.0,
-                                                          decoration:
-                                                              TextDecoration
-                                                                  .none),
-                                                    )),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 50.0),
-                                                child: Text(
-                                                    prod["preco"].toString(),
-                                                    style: TextStyle(
-                                                        color:
-                                                            AppColors.textColor,
-                                                        fontSize: 20.0,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .none)),
-                                              ),
-                                            ],
-                                          )),
-                                    ),
+            child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                child: TextField(
+                  onChanged: (String value) async {
+                    setState(() {
+                      name = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffF02E65)),
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 66, 125, 145)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: name,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                child: TextField(
+                  onChanged: (String value) async {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffF02E65)),
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 66, 125, 145)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: email,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Material(
+                child: TextField(
+                  obscureText: true,
+                  onChanged: (String value) async {
+                    setState(() {
+                      cpf = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xffF02E65)),
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 66, 125, 145)),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: cpf,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            TextButton(
+              onPressed: () {
+                updateInformation();
+              },
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStatePropertyAll<Color>(AppColors.buttonColor)),
+              child: Text(
+                "Atualizar",
+                style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            Text(
+              "Compras já realizadas",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none),
+            ),
+            ListView(
+              shrinkWrap: true,
+              children: [
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: userProducts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                            padding: const EdgeInsets.only(
+                                top: 50, left: 60.0, bottom: 50.0),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    image: AssetImage(
+                                        "assets/images/logotype.png"),
+                                    width: 50.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 50.0),
+                                    child: SizedBox(
+                                        width: 300.0,
+                                        child: Text(
+                                          userProducts[index]["nome"]
+                                              .toString()
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: AppColors.textColor,
+                                              fontSize: 20.0,
+                                              decoration: TextDecoration.none),
+                                        )),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 50.0),
+                                    child: Text(
+                                        userProducts[index]["preco"].toString(),
+                                        style: TextStyle(
+                                            color: AppColors.textColor,
+                                            fontSize: 20.0,
+                                            decoration: TextDecoration.none)),
                                   )
-                                  .toList())
-                        ],
-                      ),
-                    ],
-                  )),
+                                ]));
+                      }),
+                ])
+              ],
+            ),
+          ],
+        )),
       ]),
     );
   }
