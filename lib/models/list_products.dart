@@ -40,8 +40,7 @@ class _ListProductsState extends State<ListProducts> {
           children: frontProducts
               .map((prod) => ProductCard(
                   nameProduct: prod["nome"],
-                  fileImage:
-                      "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
+                  fileImage: prod["imagem"],
                   description: prod["descricao"],
                   id: prod["id"].toString(),
                   price: prod["preco"]))

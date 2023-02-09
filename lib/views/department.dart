@@ -14,10 +14,20 @@ class Department extends StatefulWidget {
 
 class _DepartmentState extends State<Department> {
   List<dynamic> productsFromUniqueDepartment = [];
-  String queryDepartment = "Computers";
+  String queryDepartment = "";
   @override
   void initState() {
     super.initState();
+    hasDepartment();
+  }
+
+  hasDepartment() {
+    if (queryDepartment == "") {
+      Navigator.pushNamed(
+        context,
+        '/',
+      );
+    }
   }
 
   void getListProducts() async {
@@ -55,8 +65,7 @@ class _DepartmentState extends State<Department> {
                 children: productsFromUniqueDepartment
                     .map((prod) => ProductCard(
                         nameProduct: prod["nome"],
-                        fileImage:
-                            "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
+                        fileImage: prod["image"],
                         description: prod["descricao"],
                         id: prod["id"],
                         price: prod["preco"]))

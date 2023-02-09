@@ -61,7 +61,7 @@ class _CarouselWithIndicatorState extends State<Carousel> {
                                 BorderRadius.all(Radius.circular(5.0)),
                             child: Stack(
                               children: <Widget>[
-                                Image.network(item["image"],
+                                Image.network(item["imagem"],
                                     fit: BoxFit.cover, width: width),
                                 Positioned(
                                   bottom: 0.0,
@@ -83,14 +83,7 @@ class _CarouselWithIndicatorState extends State<Carousel> {
                                     child: Column(
                                       children: [
                                         TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      item.card()),
-                                            );
-                                          },
+                                          onPressed: () {},
                                           child: Text(
                                             item["nome"],
                                             style: TextStyle(

@@ -23,6 +23,7 @@ class _PaymentPageState extends State<PaymentPage> {
   double finalPrice = 0;
   int i = 0;
   bool isUserConnected = false;
+  bool isPaid = false;
 
   @override
   void initState() {
@@ -32,19 +33,18 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void getListProducts() async {
     idItems = context.read<ShoppingCart>().shoppingCart;
-
+    print(idItems);
     try {
       Response response = await Dio().get(
           "http://127.0.0.1:3000/user/findproducts",
           queryParameters: {"idItems": idItems});
       setState(() {
         cartProducts = response.data;
-        // cartProducts2 = response.data;
       });
-      while (i < cartProducts.length - 1) {
+      while (i < cartProducts.length) {
         finalPrice += double.parse(cartProducts[i]["preco"]);
         i++;
-        if (i == cartProducts.length - 1) {
+        if (i == cartProducts.length) {
           break;
         }
       }
@@ -54,11 +54,15 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   void sendListProducts() async {
+    var userId = context.read<UserProfile>().userInfo;
+
     try {
       Response response = await Dio().post(
           "http://127.0.0.1:3000/user/sendproducts",
-          queryParameters: {"values": cartProducts});
-      print(response);
+          queryParameters: {"values": cartProducts, "user": userId["id"]});
+      setState(() {
+        isPaid = response.data;
+      });
     } catch (e) {
       print(e);
     }
@@ -77,9 +81,10 @@ class _PaymentPageState extends State<PaymentPage> {
         child: Column(
           children: <Widget>[
             Header(),
-            Text(context.watch<ShoppingCart>().shoppingCart.toString()),
             cartProducts.isEmpty
-                ? Text("Carregando")
+                ? CircularProgressIndicator(
+                    semanticsLabel: 'Carregando',
+                  )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -100,11 +105,10 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 bottom: 50.0),
                                             child: Row(
                                               children: [
-                                                Image(
-                                                  image: AssetImage(
-                                                      "assets/images/logotype.png"),
-                                                  width: 50.0,
-                                                ),
+                                                Image.network(
+                                                    prod["imagem"].toString(),
+                                                    fit: BoxFit.cover,
+                                                    width: 50.0),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -151,31 +155,26 @@ class _PaymentPageState extends State<PaymentPage> {
                             SizedBox(
                               height: 50.0,
                               width: 200.0,
-                              child: TextButton(
-                                onPressed: () {
-                                  sendListProducts();
-                                },
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll<Color>(
-                                            AppColors.buttonColor)),
-                                child: isUserConnected
-                                    ? Text(
-                                        'Fazer Pagamento',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 20.0,
-                                        ),
-                                      )
-                                    : LoginDialog(),
-                              ),
+                              child: isUserConnected
+                                  ? ElevatedButton(
+                                      onPressed: () {
+                                        sendListProducts();
+                                      },
+                                      child: Text("Fazer Pagamento",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 15.0,
+                                          )))
+                                  : LoginDialog(),
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
+            Text(isPaid ? "Obrigado pela preferência" : "",
+                style: TextStyle(fontSize: 25)),
             Footer()
           ],
         ),

@@ -3,6 +3,8 @@ import 'package:learn/models/footer.dart';
 import 'package:learn/models/header/header.dart';
 import 'package:dio/dio.dart';
 import 'package:learn/models/product_card.dart';
+import 'package:learn/providers/search_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(SearchPage());
 
@@ -14,11 +16,25 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  List<dynamic> productsFromUniqueDepartment = [];
-  String searchTerm = "Computers";
+  List<dynamic> searchResults = [];
+  String searchTerm = "";
+  var n = 0;
+
   @override
   void initState() {
     super.initState();
+    context.read<SearchProvider>().resetSearch(1);
+  }
+
+  hasSearchTerm() {
+    if (searchTerm == "") {
+      Navigator.pushNamed(
+        context,
+        '/',
+      );
+    } else {
+      getListProducts();
+    }
   }
 
   void getListProducts() async {
@@ -26,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
       Response response = await Dio().get("http://127.0.0.1:3000/search",
           queryParameters: {"searchTerm": searchTerm});
       setState(() {
-        productsFromUniqueDepartment = response.data;
+        searchResults = response.data;
       });
     } catch (e) {
       print(e);
@@ -35,12 +51,15 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    var searchChoosed = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
     setState(() {
-      searchTerm = searchChoosed['searchChoosed'] ?? "";
-      getListProducts();
+      searchTerm = context.read<SearchProvider>().searchTerm;
     });
+
+    while (context.read<SearchProvider>().searchtime != 0) {
+      hasSearchTerm();
+      context.read<SearchProvider>().resetSearch(0);
+    }
+
     return Scaffold(
         body: SafeArea(
             child: SingleChildScrollView(
@@ -48,15 +67,15 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: <Widget>[
             Header(),
-            Text(searchChoosed['searchChoosed'] ?? ""),
-            productsFromUniqueDepartment.isEmpty
-                ? Text("faça uma busca")
+            searchResults.isEmpty
+                ? CircularProgressIndicator(
+                    semanticsLabel: 'Carregando',
+                  )
                 : Wrap(
-                    children: productsFromUniqueDepartment
+                    children: searchResults
                         .map((prod) => ProductCard(
                             nameProduct: prod["nome"],
-                            fileImage:
-                                "https://static.vecteezy.com/ti/vetor-gratis/p3/226407-tshirt-vector-camisa-preta-gratis-vetor.jpg",
+                            fileImage: prod["imagem"],
                             description: prod["descricao"],
                             id: prod["id"],
                             price: prod["preco"]))

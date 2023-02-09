@@ -66,7 +66,7 @@ class _LoginDialogState extends State<LoginDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
       onPressed: () => showDialog<String>(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -151,6 +151,7 @@ class _LoginDialogState extends State<LoginDialog> {
       child: Text(
         "Fazer Login",
         style: TextStyle(
+          fontSize: 15.0,
           color: AppColors.whiteColor,
         ),
       ),

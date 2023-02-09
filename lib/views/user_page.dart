@@ -20,6 +20,8 @@ class _UserState extends State<User> {
   String email = "";
   String cpf = "";
   int id = 1;
+  bool isUpdated = false;
+  var n = 0;
 
   @override
   void initState() {
@@ -29,7 +31,6 @@ class _UserState extends State<User> {
   void getShopping() async {
     setState(() {
       userInformation = context.read<UserProfile>().userInfo;
-      //  = userInformation["shopping"];
       name = userInformation["name"];
       email = userInformation["email"];
       cpf = userInformation["cpf"];
@@ -44,7 +45,6 @@ class _UserState extends State<User> {
       setState(() {
         userProducts = response.data;
       });
-      dispose();
     } catch (e) {
       print(e);
     }
@@ -68,13 +68,20 @@ class _UserState extends State<User> {
         "cpf": cpf,
         "id": id
       });
+      setState(() {
+        isUpdated = response.data;
+      });
     } catch (e) {
       print(e);
     }
   }
 
   Widget build(BuildContext context) {
-    getShopping();
+    while (n == 0) {
+      getShopping();
+      n++;
+    }
+
     return SingleChildScrollView(
       child: Column(children: [
         Container(
@@ -109,6 +116,10 @@ class _UserState extends State<User> {
                 onPressed: () {
                   Navigator.pop(context);
                   context.read<UserProfile>().closeSession(false);
+                  Navigator.pushNamed(
+                    context,
+                    '/search',
+                  );
                 },
                 child: Text(
                   "Sair",
@@ -216,7 +227,7 @@ class _UserState extends State<User> {
                   backgroundColor:
                       MaterialStatePropertyAll<Color>(AppColors.buttonColor)),
               child: Text(
-                "Atualizar",
+                "Atualizar Dados",
                 style: TextStyle(
                     color: AppColors.whiteColor,
                     fontSize: 20.0,
@@ -225,61 +236,77 @@ class _UserState extends State<User> {
               ),
             ),
             SizedBox(height: 20.0),
+            Text(isUpdated ? "Atualizado" : "", style: TextStyle(fontSize: 25)),
+            SizedBox(height: 20.0),
             Text(
-              "Compras já realizadas",
+              "Compras realizadas",
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.none),
             ),
-            ListView(
-              shrinkWrap: true,
-              children: [
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: userProducts.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 50, left: 60.0, bottom: 50.0),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                    image: AssetImage(
-                                        "assets/images/logotype.png"),
-                                    width: 50.0,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 50.0),
-                                    child: SizedBox(
-                                        width: 300.0,
-                                        child: Text(
-                                          userProducts[index]["nome"]
-                                              .toString()
-                                              .toString(),
-                                          style: TextStyle(
-                                              color: AppColors.textColor,
-                                              fontSize: 20.0,
-                                              decoration: TextDecoration.none),
-                                        )),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 50.0),
-                                    child: Text(
-                                        userProducts[index]["preco"].toString(),
-                                        style: TextStyle(
-                                            color: AppColors.textColor,
-                                            fontSize: 20.0,
-                                            decoration: TextDecoration.none)),
-                                  )
-                                ]));
-                      }),
-                ])
-              ],
-            ),
+            userProducts.isEmpty
+                ? CircularProgressIndicator(
+                    semanticsLabel: 'Carregando',
+                  )
+                : ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: userProducts.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 50, left: 60.0, bottom: 50.0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Image.network(
+                                                userProducts[index]["imagem"],
+                                                fit: BoxFit.cover,
+                                                width: 50.0),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 50.0),
+                                              child: SizedBox(
+                                                  width: 300.0,
+                                                  child: Text(
+                                                    userProducts[index]["nome"]
+                                                        .toString()
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color:
+                                                            AppColors.textColor,
+                                                        fontSize: 20.0,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .none),
+                                                  )),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 50.0),
+                                              child: Text(
+                                                  userProducts[index]["preco"]
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppColors.textColor,
+                                                      fontSize: 20.0,
+                                                      decoration:
+                                                          TextDecoration.none)),
+                                            )
+                                          ]));
+                                }),
+                          ])
+                    ],
+                  ),
           ],
         )),
       ]),
