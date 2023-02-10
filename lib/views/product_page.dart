@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_colors.dart';
-import 'package:learn/models/footer.dart';
-import 'package:learn/models/header/header.dart';
+import 'package:ecommerce/models/app_colors.dart';
+import 'package:ecommerce/models/footer.dart';
+import 'package:ecommerce/models/header/header.dart';
 import 'package:dio/dio.dart';
-import 'package:learn/providers/product_provider.dart';
-import 'package:learn/providers/shopping_cart.dart';
+import 'package:ecommerce/providers/product_provider.dart';
+import 'package:ecommerce/providers/shopping_cart.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(ProductPage());

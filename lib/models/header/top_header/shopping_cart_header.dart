@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/providers/shopping_cart.dart';
+import 'package:ecommerce/providers/shopping_cart.dart';
 import 'package:provider/provider.dart';
 
 class ShoppingCartIcom extends StatelessWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/product_card.dart';
+import 'package:ecommerce/models/product_card.dart';
 import 'package:dio/dio.dart';
 
 void main() => runApp(const ListProducts());

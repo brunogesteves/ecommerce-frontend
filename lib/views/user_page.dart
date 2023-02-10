@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_colors.dart';
-import 'package:learn/providers/user_id.dart';
+import 'package:ecommerce/models/app_colors.dart';
+import 'package:ecommerce/providers/user_id.dart';
 import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 

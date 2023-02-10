@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/providers/search_provider.dart';
+import 'package:ecommerce/providers/search_provider.dart';
 import 'package:provider/provider.dart';
 
 class InputSearch extends StatefulWidget {

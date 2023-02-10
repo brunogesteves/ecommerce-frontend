@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/footer.dart';
-import 'package:learn/models/header/header.dart';
+import 'package:ecommerce/models/footer.dart';
+import 'package:ecommerce/models/header/header.dart';
 import 'package:dio/dio.dart';
-import 'package:learn/models/product_card.dart';
-import 'package:learn/providers/search_provider.dart';
+import 'package:ecommerce/models/product_card.dart';
+import 'package:ecommerce/providers/search_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(SearchPage());

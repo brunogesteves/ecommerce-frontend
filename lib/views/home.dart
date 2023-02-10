@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/carousel.dart';
-import 'package:learn/models/footer.dart';
-import 'package:learn/models/header/header.dart';
-import 'package:learn/models/list_products.dart';
+import 'package:ecommerce/models/carousel.dart';
+import 'package:ecommerce/models/footer.dart';
+import 'package:ecommerce/models/header/header.dart';
+import 'package:ecommerce/models/list_products.dart';
 
 void main() => runApp(Home());
 

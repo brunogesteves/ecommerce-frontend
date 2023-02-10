@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_colors.dart';
-import 'package:learn/models/footer.dart';
-import 'package:learn/models/header/header.dart';
-import 'package:learn/models/header/top_header/login_area.dart';
+import 'package:ecommerce/models/app_colors.dart';
+import 'package:ecommerce/models/footer.dart';
+import 'package:ecommerce/models/header/header.dart';
+import 'package:ecommerce/models/header/top_header/login_area.dart';
 import 'package:dio/dio.dart';
-import 'package:learn/providers/shopping_cart.dart';
-import 'package:learn/providers/user_id.dart';
+import 'package:ecommerce/providers/shopping_cart.dart';
+import 'package:ecommerce/providers/user_id.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(PaymentPage());
@@ -173,7 +173,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ],
                   ),
-            Text(isPaid ? "Obrigado pela preferência" : "",
+            Text(isPaid ? "Compra Efetuada" : "",
                 style: TextStyle(fontSize: 25)),
             Footer()
           ],

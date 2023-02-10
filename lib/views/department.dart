@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/header/header.dart';
+import 'package:ecommerce/models/header/header.dart';
 import 'package:dio/dio.dart';
-import 'package:learn/models/product_card.dart';
+import 'package:ecommerce/models/product_card.dart';
 
 void main() => runApp(Department());
 

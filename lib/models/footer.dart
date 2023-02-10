@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_colors.dart';
+import 'package:ecommerce/models/app_colors.dart';
 
 void main() => runApp(Footer());
 

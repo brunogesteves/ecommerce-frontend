@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/app_colors.dart';
-import 'package:learn/providers/product_provider.dart';
+import 'package:ecommerce/models/app_colors.dart';
+import 'package:ecommerce/providers/product_provider.dart';
 import 'package:provider/provider.dart';
-// import 'package:learn/views/app_styles.dart';
+// import 'package:ecommerce/views/app_styles.dart';
 
 class ProductCard extends StatelessWidget {
   final String nameProduct;

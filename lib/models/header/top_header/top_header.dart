@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:learn/models/header/top_header/input_search.dart';
-import 'package:learn/models/header/top_header/login_area.dart';
-import 'package:learn/models/header/top_header/logotype.dart';
-import 'package:learn/models/app_colors.dart';
-import 'package:learn/models/header/top_header/shopping_cart_header.dart';
+import 'package:ecommerce/models/header/top_header/input_search.dart';
+import 'package:ecommerce/models/header/top_header/login_area.dart';
+import 'package:ecommerce/models/header/top_header/logotype.dart';
+import 'package:ecommerce/models/app_colors.dart';
+import 'package:ecommerce/models/header/top_header/shopping_cart_header.dart';
 
 void main() => runApp(TopHeader());
 
